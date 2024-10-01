@@ -1,24 +1,36 @@
 // Importing all components
-const express = require('express');
-const dotenv = require('dotenv');
-const connectDB = require('./config/db');
-const userRoutes = require('./routes/userRoutes');
-const groupRoutes = require('./routes/groupRoutes');
+import express, { json } from 'express';
+import dotenv from 'dotenv';
+import { connectDB } from "./config/db.js";
+import cookieParser from "cookie-parser";
+import userRoutes from './routes/userRoutes.js';
+import groupRoutes from './routes/groupRoutes.js';
+import taskRoutes from './routes/taskRoutes.js';
+import noteRoutes from './routes/noteRoutes.js';
+import expenseRoutes from './routes/expenseRoutes.js';
+import taskScheduler from './utils/taskScheduler.js';
 
-dotenv.config();
+dotenv.config({
+    path: "./config/config.env",
+});
+
 connectDB(); // connecting to the MongoDB database
 
 const app = express(); //intitialising express
-config({
-    path: "./config/config.env",
-});
-app.use(express.json()); // parse incoming json requests
+app.use(cookieParser());
+app.use(json()); // parse incoming json requests
 
 //Routes
 app.use('/api/users', userRoutes)
 app.use('/api/groups', groupRoutes)
+app.use('/api/tasks', taskRoutes);
+app.use('/api/notes', noteRoutes);
+app.use('/api/expenses', expenseRoutes);
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, console.log(`Server running on port ${PORT}`));
+taskScheduler();
+
+const port = process.env.PORT || 5500;
+
+app.listen(port, console.log(`Server running on port ${port}`));
 
  

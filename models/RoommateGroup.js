@@ -1,12 +1,12 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
+import { Schema, model } from 'mongoose';
+import { genSalt, hash, compare } from 'bcrypt';
 
-const RoommateGroupSchema = new mongoose.Schema({
+const RoommateGroupSchema = new Schema({
     name: { type: String, required: true },
     password: { type: String, required: true },
     admins: [
         {
-            type: mongoose.Schema.Types.ObjectId,
+            type: Schema.Types.ObjectId,
             ref: 'User',
             required: true,
 
@@ -14,7 +14,7 @@ const RoommateGroupSchema = new mongoose.Schema({
     ],
     members: [
         {
-            type: mongoose.Schema.Types.ObjectId,
+            type: Schema.Types.ObjectId,
             ref: 'User',
         },
     ],
@@ -25,12 +25,12 @@ RoommateGroupSchema.pre('save', async function (next) {
     if (!this.isModified('password')) {
       next();
     }
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
+    const salt = await genSalt(10);
+    this.password = await hash(this.password, salt);
 });
 
 RoommateGroupSchema.methods.matchPassword = async function (enteredPassword) {
-    return await bcrypt.compare(enteredPassword, this.password);
+    return await compare(enteredPassword, this.password);
 };
 
-module.exports = mongoose.model('RoommateGroup', RoommateGroupSchema);
+export default model('RoommateGroup', RoommateGroupSchema);
