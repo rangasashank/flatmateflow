@@ -22,7 +22,7 @@ export const createNote = async (req, res) => {
 // Get notes for a group
 export const getNotes = async (req, res) => {
   try {
-    const notes = await Note.find({ group: req.params.groupId }).populate('createdBy');
+    const notes = await Note.find({ group: req.params.groupId });
     res.status(200).json(notes);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching notes', error: error.message });
