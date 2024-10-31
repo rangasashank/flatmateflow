@@ -1,4 +1,4 @@
-import User from '../models/User.js';
+import {User} from '../models/User.js';
 import RoommateGroup from '../models/RoommateGroup.js';
 import bcrypt from'bcryptjs';
 import jwt from 'jsonwebtoken';
