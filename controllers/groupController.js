@@ -1,5 +1,5 @@
 import RoommateGroup from '../models/RoommateGroup.js';
-import {User} from '../models/User.js';
+import User from '../models/User.js';
 import { sendCookie } from "../utils/features.js"
 import bcrypt from'bcryptjs';
 
