@@ -25,7 +25,7 @@ export const register = async (req, res) => {
         })
 
         token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '30d' });
-        sendCookie(user, res,`Registered Succesfully ${user.name}`, 200)
+        sendCookie(token, user, res,`Registered Succesfully ${user.name}`, 200)
 
         
 
@@ -76,7 +76,7 @@ export const login = async (req, res) => {
 
         token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '30d' });
 
-          sendCookie(user, res,`Welcome Back ${user.name}`, 200)
+          sendCookie(token, user, res,`Welcome Back ${user.name}`, 200)
 
     } catch (error) {
         res.status(500).json({error: error.message});
