@@ -10,11 +10,7 @@ import noteRoutes from './routes/noteRoutes.js';
 import expenseRoutes from './routes/expenseRoutes.js';
 import taskScheduler from './utils/taskScheduler.js';
 import cors from 'cors';
-app.use(cors({
-    origin: 'http://localhost:5173', // Your frontend's origin,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-  }));
+
 
 dotenv.config({
     path: "./config/config.env",
@@ -23,6 +19,11 @@ dotenv.config({
 connectDB(); // connecting to the MongoDB database
 
 const app = express(); //intitialising express
+app.use(cors({
+    origin: 'http://localhost:5173', // Your frontend's origin,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  }));
 app.use(cookieParser());
 app.use(json()); // parse incoming json requests
 
