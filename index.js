@@ -11,7 +11,9 @@ import expenseRoutes from './routes/expenseRoutes.js';
 import taskScheduler from './utils/taskScheduler.js';
 import cors from 'cors';
 app.use(cors({
-    origin: 'http://localhost:5173', // Your frontend's origin
+    origin: 'http://localhost:5173', // Your frontend's origin,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   }));
 
 dotenv.config({
