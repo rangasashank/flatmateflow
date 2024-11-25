@@ -2,7 +2,6 @@ import {User} from '../models/User.js';
 import RoommateGroup from '../models/RoommateGroup.js';
 import bcrypt from'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { sendCookie } from "../utils/features.js"
 
 // register a new user
 export const register = async (req, res) => {
@@ -25,7 +24,15 @@ export const register = async (req, res) => {
         })
 
         token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '30d' });
-        sendCookie(token, user, res,`Registered Succesfully ${user.name}`, 200)
+        res.status(200).json({
+            token,
+            user: {
+              id: user._id,
+              name: user.name,
+              email: user.email,
+              group: user.group || null, // Optional: include group if applicable
+            },
+          });
 
         
 
@@ -76,7 +83,15 @@ export const login = async (req, res) => {
 
         token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '30d' });
 
-          sendCookie(token, user, res,`Welcome Back ${user.name}`, 200)
+        res.status(200).json({
+            token,
+            user: {
+              id: user._id,
+              name: user.name,
+              email: user.email,
+              group: user.group || null, // Optional: include group if applicable
+            },
+          });
 
     } catch (error) {
         res.status(500).json({error: error.message});
@@ -85,18 +100,22 @@ export const login = async (req, res) => {
 };
 
 // logout the user
-export const logout = async (req, res) => {
 
-    res.status(200).cookie("token", "", {
-        expires: new Date(Date.now()),
-        sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
-        secure: process.env.NODE_ENV === "Development" ? false : true,
-
-    }).json({
-        success: true,
-        user: req.user._id,
-    })
-}
+    export const logout = async (req, res) => {
+        try {
+          // Simply respond with a success message
+          res.status(200).json({
+            success: true,
+            message: 'Logged out successfully',
+          });
+        } catch (error) {
+          console.error('Error during logout:', error);
+          res.status(500).json({
+            success: false,
+            message: 'Server error',
+          });
+        }
+      };
 
 //delete user
 export const deleteUser= async (req, res) => {
