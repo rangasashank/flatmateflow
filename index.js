@@ -9,6 +9,10 @@ import taskRoutes from './routes/taskRoutes.js';
 import noteRoutes from './routes/noteRoutes.js';
 import expenseRoutes from './routes/expenseRoutes.js';
 import taskScheduler from './utils/taskScheduler.js';
+import cors from 'cors';
+app.use(cors({
+    origin: 'http://localhost:5173', // Your frontend's origin
+  }));
 
 dotenv.config({
     path: "./config/config.env",
