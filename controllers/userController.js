@@ -7,6 +7,7 @@ import { sendCookie } from "../utils/features.js"
 // register a new user
 export const register = async (req, res) => {
     const {name, email, password} = req.body;
+    var {token} = req.cookies
 
     try {
         const userExists = await User.findOne({ email });
@@ -23,7 +24,7 @@ export const register = async (req, res) => {
             password: hashedPassword,
         })
 
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '30d' });
+        token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '30d' });
         sendCookie(user, res,`Registered Succesfully ${user.name}`, 200)
 
         
@@ -52,7 +53,7 @@ export const getUserProfile = async (req, res) => {
 
 // login user
 export const login = async (req, res) => {
-    const {token} = req.cookies;
+    var {token} = req.cookies;
       if(token) {
           return res.status(404).json({
               success: false,
