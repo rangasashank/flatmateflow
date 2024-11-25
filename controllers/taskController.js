@@ -32,10 +32,6 @@ export const createRecurringTask = async(req, res) => {
       return res.status(404).json({ message: 'Group not found' });
     }
 
-    if (req.user._id !== group.admins[0]) {
-      return res.status(404).json({ message: 'You are not admin' });
-    }
-
     // Create the recurring task
     const task = new Task({
       title,

@@ -33,6 +33,23 @@ export const register = async (req, res) => {
     }
 };
 
+export const getUserProfile = async (req, res) => {
+    try {
+      if (!req.user) {
+        return res.status(401).json({ message: 'User not authenticated' });
+      }
+  
+      res.status(200).json({
+        name: req.user.name,
+        email: req.user.email,
+        group: req.user.group || null, // Include the group if applicable
+      });
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  };
+
 // login user
 export const login = async (req, res) => {
     const {token} = req.cookies;
@@ -56,7 +73,7 @@ export const login = async (req, res) => {
             return res.status(400).json({ message: 'Invalid email or password' });
         }
 
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '30d' });
+        token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '30d' });
 
           sendCookie(user, res,`Welcome Back ${user.name}`, 200)
 
