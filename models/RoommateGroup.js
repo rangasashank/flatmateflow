@@ -6,16 +6,16 @@ const RoommateGroupSchema = new Schema({
     password: { type: String, required: true },
     admins: [
         {
-            type: Schema.Types.ObjectId,
-            ref: 'User',
+            _id: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+            name: { type: String, required: true },
             required: true,
 
         },
     ],
     members: [
         {
-            type: Schema.Types.ObjectId,
-            ref: 'User',
+            _id: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+            name: { type: String, required: true },
         },
     ],
 });
