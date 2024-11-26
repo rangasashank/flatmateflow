@@ -35,6 +35,11 @@ export const createGroup = async(req, res) => {
 
 };
 
+export const getMembers = async(req, res) => {
+  const members = await RoommateGroup.findById(req.params.groupId).members
+    res.status(200).json(members);
+}
+
 // function to delete a group
 
 export const deleteGroup = async(req, res) => {
