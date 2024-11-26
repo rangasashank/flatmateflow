@@ -46,11 +46,15 @@ export const getUserProfile = async (req, res) => {
       if (!req.user) {
         return res.status(401).json({ message: 'User not authenticated' });
       }
+      let group = null;
+      if (req.user.group) {
+        group = req.user.group
+      }
   
       res.status(200).json({
         name: req.user.name,
         email: req.user.email,
-        group: req.user.group || null, // Include the group if applicable
+        group: req.user.group, // Include the group if applicable
       });
     } catch (error) {
       console.error('Error fetching user profile:', error);

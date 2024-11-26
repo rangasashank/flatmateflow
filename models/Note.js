@@ -14,6 +14,11 @@ const noteSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
     },
+    pinned: {
+      type: Boolean,
+      required: true,
+      default: false
+    }
   }, { timestamps: true });
   
   export default model('Note', noteSchema);
