@@ -23,8 +23,11 @@ export const createGroup = async(req, res) => {
     const user = await User.findOne({ email: userEmail });
     user.group = group._id;
     await user.save();
-    group.members.push(user._id);
-    group.admins.push(user._id); 
+    const member = {_id: user._id, name: user.name}
+    group.members.push(member);
+    group.admins.push(member); 
+    await group.save();
+
     res.status(201).json({
         id: group._id,
         name: group.name,
@@ -97,7 +100,7 @@ export const addMember = async (req, res) => {
       }
   
       // Add the user to the group
-      group.members.push(userToAdd._id);
+      group.members.push({_id: userToAdd._id, name: userToAdd.name});
       await group.save();
   
       // Update user's group reference
@@ -113,7 +116,9 @@ export const addMember = async (req, res) => {
   // Join a group using group name and password
 export const joinGroup = async (req, res) => {
     const { groupName, groupPassword } = req.body;
-    const userId = req.user.id;  // Assuming JWT authentication middleware provides the user ID
+    const userId = req.user.id;
+    const userName = req.user.name;
+      // Assuming JWT authentication middleware provides the user ID
   
     try {
       // Find the group by name
@@ -132,7 +137,7 @@ export const joinGroup = async (req, res) => {
       if (group.members.includes(userId)) {
         return res.status(400).json({ message: 'User is already in the group' });
       }
-  
+      const member = {_id: userId, name:userName}
       // Add the user to the group
       group.members.push(userId);
       await group.save();
@@ -152,7 +157,7 @@ export const joinGroup = async (req, res) => {
 
 export const removeMember = async(req, res) => {
     const {groupName, userEmail, admin_email} = req.body;
-
+    const userId = req.user.id;
     try {
         const group = await RoommateGroup.findOne({name: groupName});
         if (!group) {
@@ -173,7 +178,7 @@ export const removeMember = async(req, res) => {
           if (user.group) {
             const group = await RoommateGroup.findById(user.group);
             if (group) {
-              group.members = group.members.filter(member => member.toString() !== userId.toString());
+              group.members = group.members.filter(member => member._id !== userId.toString());
               await group.save();
             }
           }
