@@ -36,8 +36,14 @@ export const createGroup = async(req, res) => {
 };
 
 export const getMembers = async(req, res) => {
-  const members = await RoommateGroup.findById(req.params.groupId).members
-    res.status(200).json(members);
+  try {
+    const group = await RoommateGroup.findById(req.params.groupId)
+    res.status(200).json(group.members);
+  }
+  catch {
+    res.status(500).json({error: error.message})
+  }
+
 }
 
 // function to delete a group
