@@ -126,6 +126,7 @@ export const joinGroup = async (req, res) => {
       }
   
       // Check if the group password matches
+      res.status(200).json({g: group.password, groupPassword})
         if (!(group.password === groupPassword)) {
             return res.status(400).json({ message: 'Invalid group name or password' });
         }
