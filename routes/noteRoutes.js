@@ -8,6 +8,6 @@ const router = Router();
 router.post('/', protect, createNote);  // Create a note
 router.get('/:groupId', protect, getNotes);  // Get notes for a group
 router.delete('/:noteId', protect, deleteNote);
-router.post('/pin', protect, pinNote)
+router.post('/pin/:noteId', protect, pinNote)
 
 export default router;
