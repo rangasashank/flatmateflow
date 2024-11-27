@@ -128,11 +128,10 @@ export const joinGroup = async (req, res) => {
       }
   
       // Check if the group password matches
-      const isPasswordMatch = await bcrypt.compare(groupPassword, group.password);
-      return res.status(200).json({isPasswordmatch:isPasswordMatch, groupPassword, hash:group.password})
-      if (!isPasswordMatch) {
-        return res.status(401).json({ message: 'Incorrect group password' });
-      }
+      const isMatch = await bcrypt.compare(groupPassword, group.password);
+        if (!isMatch) {
+            return res.status(400).json({ message: 'Invalid group name or password' });
+        }
   
       // Check if the user is already a member
       if (group.members.includes(userId)) {
