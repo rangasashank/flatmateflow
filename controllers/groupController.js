@@ -139,7 +139,7 @@ export const joinGroup = async (req, res) => {
       }
       const member = {_id: userId, name:userName}
       // Add the user to the group
-      group.members.push(userId);
+      group.members.push(member);
       await group.save();
   
       // Add group reference to the user model
