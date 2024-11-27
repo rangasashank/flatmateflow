@@ -163,7 +163,7 @@ export const joinGroup = async (req, res) => {
 
 export const removeMember = async(req, res) => {
     const {groupId, userEmail, admin_email} = req.body;
-    if (userEmail == admin_email) {
+    if (userEmail.toString().trim() === admin_email.toString().trim()) {
       return res.status(400).json({message: "Cannot remove the admin"})
     }
     try {
