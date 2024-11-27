@@ -61,7 +61,7 @@ export const deleteGroup = async(req, res) => {
         const admin = await User.findOne({ email: admin_email });
         var isAdmin = false;
         for (let index = 0; index < existingGroup.admins.length; index++) {
-          const id = existingGroup.admins[index]._id;
+          let id = existingGroup.admins[index]._id;
           if (id === admin._id) {
             isAdmin = true
             break;
@@ -172,7 +172,7 @@ export const removeMember = async(req, res) => {
         const admin = await User.findOne({ email: admin_email });
         var isAdmin = false;
         for (let index = 0; index < group.admins.length; index++) {
-          const id = group.admins[index]._id;
+          let id = group.admins[index]._id;
           if (id === admin._id) {
             isAdmin = true
             break;
@@ -188,7 +188,7 @@ export const removeMember = async(req, res) => {
 
         var isMember = false;
         for (let index = 0; index < group.members.length; index++) {
-          const id = group.members[index]._id;
+          let id = group.members[index]._id;
           if (id === user._id) {
             isMember = true
             break;
