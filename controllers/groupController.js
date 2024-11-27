@@ -126,6 +126,7 @@ export const joinGroup = async (req, res) => {
       if (!group) {
         return res.status(404).json({ message: 'Group not found' });
       }
+      return res.status(200).json({group})
   
       // Check if the group password matches
       const isPasswordMatch = await bcrypt.compare(groupPassword.trim(), group.password.trim());
