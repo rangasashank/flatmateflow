@@ -132,6 +132,7 @@ export const joinGroup = async (req, res) => {
       const hashedPassword = await bcrypt.hash(groupPassword, salt);
       
       let isMatch = false;
+      return res.status(200).json({p:group.password, h:hashedPassword})
       if (group.password === hashedPassword) {
         isMatch = true;
       }
