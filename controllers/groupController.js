@@ -102,7 +102,7 @@ export const addMember = async (req, res) => {
   
       // Check if the user is already in a group
       const group = await RoommateGroup.findById(groupId);
-      if ((userToAdd.group) || (userToAdd.group.groupName != "" )) {
+      if ((userToAdd.group)) {
         return res.status(400).json({ message: 'User is already in a group, first they need to leave the group' });
       }
   
