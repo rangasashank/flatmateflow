@@ -50,11 +50,11 @@ export const getMembers = async(req, res) => {
 // function to delete a group
 
 export const deleteGroup = async(req, res) => {
-    const {groupName, groupPassword, admin_email} = req.body;
+    const {groupId, groupPassword, admin_email} = req.body;
 
 
     try{
-        const existingGroup = await RoommateGroup.findOne({name: groupName});
+        const existingGroup = await RoommateGroup.findOne({_id: groupId});
         if (!existingGroup) {
             return res.status(400).json({message: 'Group name does not exists, Please choose another name'})
         }
