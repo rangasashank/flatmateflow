@@ -174,9 +174,10 @@ export const removeMember = async(req, res) => {
         var isAdmin = false;
         for (let index = 0; index < group.admins.length; index++) {
           let id = group.admins[index]._id;
+          return res.status(200).json({admin: admin._id, id: id})
           if (id === admin._id) {
             isAdmin = true
-            return res.status(200).json({isAdmin})
+            
             break;
           }
         }
