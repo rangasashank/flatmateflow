@@ -14,12 +14,10 @@ export const createGroup = async(req, res) => {
         if (existingGroup) {
             return res.status(400).json({message: 'Group name already exists, Please choose another name'})
         }
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
 
     
 
-    const group = await RoommateGroup.create({name: groupName, password: hashedPassword});
+    const group = await RoommateGroup.create({name: groupName, password: password});
     const user = await User.findOne({ email: userEmail });
     user.group = group._id;
     await user.save();
@@ -128,12 +126,8 @@ export const joinGroup = async (req, res) => {
       }
   
       // Check if the group password matches
-      const utf8PlaintextPassword = Buffer.from(groupPassword, 'utf-8').toString('utf-8');
-      const utf8HashedPassword = Buffer.from(group.password, 'utf-8').toString('utf-8');
-  
-      const isMatch = await bcrypt.compare(utf8PlaintextPassword, utf8HashedPassword);
-        if (!isMatch) {
-            return res.status(400).json({ utf8PlaintextPassword, hashed: utf8HashedPassword, message: 'Invalid group name or password' });
+        if (!(group.password === groupPassword)) {
+            return res.status(400).json({ message: 'Invalid group name or password' });
         }
   
       // Check if the user is already a member
