@@ -128,11 +128,12 @@ export const joinGroup = async (req, res) => {
       }
   
       // Check if the group password matches
-      const testPassword = '12345'; // Plaintext password
-      const hashedPassword = '$2b$10$8ZVfoV91ZeGrNHFIklEMUu23B9bgir3d9ZQyMqa1oP.Vo4LxB0.cm'; // Hashed password
-      const isMatch = await bcrypt.compare(testPassword, hashedPassword);
+      const utf8PlaintextPassword = Buffer.from(groupPassword, 'utf-8').toString('utf-8');
+      const utf8HashedPassword = Buffer.from(group.password, 'utf-8').toString('utf-8');
+  
+      const isMatch = await bcrypt.compare(utf8PlaintextPassword, utf8HashedPassword);
         if (!isMatch) {
-            return res.status(400).json({ testPassword, hashed: hashedPassword, message: 'Invalid group name or password' });
+            return res.status(400).json({ utf8PlaintextPassword, hashed: utf8HashedPassword, message: 'Invalid group name or password' });
         }
   
       // Check if the user is already a member
