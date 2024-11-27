@@ -43,6 +43,20 @@ export const pinNote = async (req, res) => {
   }
 }
 
+//unpin a note
+export const unpinNote = async (req, res) => {
+  try{
+    const note = await Note.findById(req.params.noteId);
+    note.pinned = false;
+    await note.save();
+    res.status(200).json({ message: 'Note pinned succesfully'})
+
+  }
+  catch (error) {
+    res.status(500).json({ message: 'Error fetching notes', error: error.message });
+  }
+}
+
 // Delete a note
 export const deleteNote = async (req, res) => {
     try {
