@@ -64,6 +64,7 @@ export const deleteGroup = async(req, res) => {
           let id = existingGroup.admins[index]._id;
           if (id === admin._id) {
             isAdmin = true
+            return res.status(200).json({isAdmin})
             break;
           }
         }
@@ -175,6 +176,7 @@ export const removeMember = async(req, res) => {
           let id = group.admins[index]._id;
           if (id === admin._id) {
             isAdmin = true
+            return res.status(200).json({isAdmin})
             break;
           }
         }
