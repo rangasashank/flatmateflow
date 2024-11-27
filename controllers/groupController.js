@@ -59,19 +59,19 @@ export const deleteGroup = async(req, res) => {
             return res.status(400).json({message: 'Group name does not exists, Please choose another name'})
         }
         const admin = await User.findOne({ email: admin_email });
-        if (!group.admins.includes(admin)) {
+        if (!existingGroup.admins.includes(admin)) {
             return res.status(400).json({ message: 'Only Admin has rights to delete' });
           }
     
-        const isPasswordMatch = await bcrypt.compare(groupPassword, group.password);
+        const isPasswordMatch = await bcrypt.compare(groupPassword, existingGroup.password);
         if (!isPasswordMatch ) {
             return res.status(401).json({ message: 'Incorrect group password' });
         }
 
-        await RoommateGroup.deleteOne({name: groupName})
+        await RoommateGroup.deleteOne({_id: groupId})
     res.status(201).json({
-        id: group._id,
-        name: group.name,
+        id: existingGroup._id,
+        name: existingGroup.name,
         })
     } catch (error) {
         res.status(500).json({error: error.message})
