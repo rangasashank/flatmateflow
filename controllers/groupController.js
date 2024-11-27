@@ -118,7 +118,7 @@ export const joinGroup = async (req, res) => {
     const { groupName, groupPassword } = req.body;
     const userId = req.user.id;
     const userName = req.user.name;
-      // Assuming JWT authentication middleware provides the user ID
+      // JWT authentication middleware provides the user ID
   
     try {
       // Find the group by name
@@ -126,6 +126,7 @@ export const joinGroup = async (req, res) => {
       if (!group) {
         return res.status(404).json({ message: 'Group not found' });
       }
+      console.log("Found group:", group);
   
       // Check if the group password matches
       const isPasswordMatch = await bcrypt.compare(groupPassword, group.password);
