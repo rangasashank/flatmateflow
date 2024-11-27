@@ -163,7 +163,9 @@ export const joinGroup = async (req, res) => {
 
 export const removeMember = async(req, res) => {
     const {groupId, userEmail, admin_email} = req.body;
-    const userId = req.user.id;
+    if (userEmail == admin_email) {
+      return res.status(400).json({message: "Cannot remove the admin"})
+    }
     try {
         const group = await RoommateGroup.findOne({_id: groupId});
         if (!group) {
@@ -200,11 +202,9 @@ export const removeMember = async(req, res) => {
             return res.status(400).json({ message: 'User is not in the group' });
           }
     
-
-          group.members = group.members.filter(member => member._id.toString().trim() !== userId.toString().trim());
+          
+          group.members = group.members.filter(member => member._id.toString().trim() !== user._id.toString().trim());
           await group.save();
-              
-
           user.group = null;
           await user.save();
 
