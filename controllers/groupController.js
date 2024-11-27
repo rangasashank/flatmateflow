@@ -59,12 +59,12 @@ export const deleteGroup = async(req, res) => {
             return res.status(400).json({message: 'Group name does not exists, Please choose another name'})
         }
         const admin = await User.findOne({ email: admin_email });
-        return res.status(200).json({admins:existingGroup.admins, id:admin._id})
         let isAdmin = false;
         for (let index = 0; index < existingGroup.admins.length; index++) {
           const id = existingGroup.admins[index]._id;
           if (id === admin._id) {
             isAdmin = true
+            break;
           }
         }
         if (!isAdmin) {
@@ -175,6 +175,7 @@ export const removeMember = async(req, res) => {
           const id = group.admins[index]._id;
           if (id === admin._id) {
             isAdmin = true
+            break;
           }
         }
         if (!isAdmin) {
@@ -190,6 +191,7 @@ export const removeMember = async(req, res) => {
           const id = group.members[index]._id;
           if (id === user._id) {
             isMember = true
+            break;
           }
         }
         if (!isMember) {
