@@ -200,7 +200,7 @@ export const removeMember = async(req, res) => {
             return res.status(400).json({ message: 'User is not in the group' });
           }
           if (user.group) {
-            const group = await RoommateGroup.findById(user.group);
+            const group = await RoommateGroup.findOne({_id:user.group});
             if (group) {
               group.members = group.members.filter(member => member._id !== userId.toString());
               await group.save();
