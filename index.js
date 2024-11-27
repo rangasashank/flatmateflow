@@ -20,7 +20,7 @@ connectDB(); // connecting to the MongoDB database
 
 const app = express(); //intitialising express
 app.use(cors({
-    origin: 'http://localhost:5173', // Your frontend's origin,
+    origin: 'https://flatmateflow.netlify.app', // Your frontend's origin,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
