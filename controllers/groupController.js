@@ -59,7 +59,7 @@ export const deleteGroup = async(req, res) => {
             return res.status(400).json({message: 'Group name does not exists, Please choose another name'})
         }
         const admin = await User.findOne({ email: admin_email });
-        if (!existingGroup.admins.includes(admin)) {
+        if (!existingGroup.admins.includes(admin._id)) {
             return res.status(400).json({ message: 'Only Admin has rights to delete' });
           }
     
@@ -162,14 +162,14 @@ export const removeMember = async(req, res) => {
         }
        
         const admin = await User.findOne({ email: admin_email });
-        if (!group.admins.includes(admin)) {
+        if (!group.admins.includes(admin._id)) {
             return res.status(400).json({ message: 'Only Admin has rights to remove a user' });
           }
         const user = await User.findOne({ email: userEmail });
         if (!user) {
             return res.status(404).json({message: 'User does not exist'})
         }
-        if (!group.members.includes(user)) {
+        if (!group.members.includes(user._id)) {
             return res.status(400).json({ message: 'User is already not in the group' });
           }
           if (user.group) {
