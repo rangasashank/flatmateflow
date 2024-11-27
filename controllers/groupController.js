@@ -153,10 +153,10 @@ export const joinGroup = async (req, res) => {
 // function to remove a member to a group / join a group, need a group password
 
 export const removeMember = async(req, res) => {
-    const {groupName, userEmail, admin_email} = req.body;
+    const {groupId, userEmail, admin_email} = req.body;
     const userId = req.user.id;
     try {
-        const group = await RoommateGroup.findOne({name: groupName});
+        const group = await RoommateGroup.findOne({_id: groupId});
         if (!group) {
             return res.status(404).json({message: 'Group does not exist'})
         }
