@@ -202,7 +202,7 @@ export const removeMember = async(req, res) => {
           if (user.group) {
             const group = await RoommateGroup.findOne({_id:user.group});
             if (group) {
-              group.members = group.members.filter(member => member._idtoString().trim() !== userId.toString().trim());
+              group.members = group.members.filter(member => member._id.toString().trim() !== userId.toString().trim());
               await group.save();
             }
           }
