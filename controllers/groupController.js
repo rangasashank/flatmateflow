@@ -1,7 +1,7 @@
 import RoommateGroup from '../models/RoommateGroup.js';
 import {User} from '../models/User.js';
 import { sendCookie } from "../utils/features.js"
-import bcrypt from'bcryptjs';
+import bcrypt from'bcrypt';
 
 // function to create a group
 
