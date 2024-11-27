@@ -59,8 +59,14 @@ export const deleteGroup = async(req, res) => {
             return res.status(400).json({message: 'Group name does not exists, Please choose another name'})
         }
         const admin = await User.findOne({ email: admin_email });
+        return res.status(200).json({admins:existingGroup.admins, id:admin._id})
         let isAdmin = false;
-       
+        for (let index = 0; index < existingGroup.admins.length; index++) {
+          const id = existingGroup.admins[index]._id;
+          if (id === admin._id) {
+            isAdmin = true
+          }
+        }
         if (!isAdmin) {
             return res.status(400).json({ message: 'Only Admin has rights to delete' });
           }
@@ -167,7 +173,7 @@ export const removeMember = async(req, res) => {
         let isAdmin = false;
         for (let index = 0; index < group.admins.length; index++) {
           const id = group.admins[index]._id;
-          if (id == admin._id) {
+          if (id === admin._id) {
             isAdmin = true
           }
         }
@@ -182,7 +188,7 @@ export const removeMember = async(req, res) => {
         let isMember = false;
         for (let index = 0; index < group.members.length; index++) {
           const id = group.members[index]._id;
-          if (id == user._id) {
+          if (id === user._id) {
             isMember = true
           }
         }
