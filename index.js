@@ -8,7 +8,8 @@ import groupRoutes from './routes/groupRoutes.js';
 import taskRoutes from './routes/taskRoutes.js';
 import noteRoutes from './routes/noteRoutes.js';
 import expenseRoutes from './routes/expenseRoutes.js';
-import taskScheduler from './utils/taskScheduler.js';
+import cron from "node-cron";
+import { processRecurringTasks } from "./controllers/taskController.js";
 import cors from 'cors';
 
 
@@ -35,7 +36,10 @@ app.use('/api/tasks', taskRoutes);
 app.use('/api/notes', noteRoutes);
 app.use('/api/expenses', expenseRoutes);
 
-taskScheduler();
+cron.schedule("0 2 * * *", async () => {
+  console.log("Running recurring task scheduler...");
+  await processRecurringTasks();
+});
 
 const port = process.env.PORT || 5500;
 

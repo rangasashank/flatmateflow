@@ -54,6 +54,52 @@ export const createRecurringTask = async(req, res) => {
 
 }
 
+export const processRecurringTasks = async () => {
+  try {
+    const today = new Date();
+
+    // Get all recurring tasks due today or earlier
+    const tasks = await Task.find({
+      isRecurring: true,
+      recurrenceNextDueDate: { $lte: today },
+    });
+
+    for (let task of tasks) {
+      const group = await RoommateGroup.findById(task.group);
+      if (!group || !group.members || group.members.length === 0) continue;
+
+      // Rotate assignedTo (find next person in cycle)
+      const currentIndex = group.members.findIndex((m) => m.toString() === task.assignedTo.toString());
+      const nextIndex = (currentIndex + 1) % group.members.length;
+      const nextUserId = group.members[nextIndex];
+
+      // Update due date
+      const nextDueDate = new Date(task.recurrenceNextDueDate);
+      nextDueDate.setDate(nextDueDate.getDate() + task.recurrenceInterval);
+
+      // Create new task instance (optional, if you want history of instances)
+      await Task.create({
+        title: task.title,
+        description: task.description,
+        assignedTo: nextUserId,
+        group: task.group,
+        dueDate: nextDueDate,
+        isRecurring: false, // this one is a one-off instance
+        createdBy: task.createdBy,
+      });
+
+      // Update recurrenceNextDueDate on original task
+      task.recurrenceNextDueDate = nextDueDate;
+      task.assignedTo = nextUserId;
+      await task.save();
+    }
+
+    console.log("Recurring tasks processed.");
+  } catch (err) {
+    console.error("Error processing recurring tasks:", err);
+  }
+};
+
 //getTasks for the group
 export const getTasks = async (req, res) => {
 try {
