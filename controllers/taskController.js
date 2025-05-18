@@ -24,22 +24,15 @@ export const createTask = async(req, res) => {
 }
 
 export const createRecurringTask = async(req, res) => {
-  const { title, description, assignedTo , dueDate, groupId, recurrenceInterval } = req.body;
-
-  try {
-    // Check if the group exists
-    const group = await RoommateGroup.findById(groupId);
-    if (!group) {
-      return res.status(404).json({ message: 'Group not found' });
-    }
-
+  const { title, description, assignedTo , dueDate, group, recurrenceInterval } = req.body;
+try {
     // Create the recurring task
     const task = new Task({
       title,
       description,
       dueDate,
       assignedTo,
-      group: groupId,
+      group,
       isRecurring: true,
       recurrenceInterval,
       recurrenceNextDueDate: dueDate,
