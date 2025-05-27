@@ -1,3 +1,4 @@
+
 import Expense from '../models/Expense.js';
 import { User } from '../models/User.js'; // Import User model
 import RoommateGroup from '../models/RoommateGroup.js'; // Import RoommateGroup model
@@ -37,6 +38,8 @@ export const getExpenses = async (req, res) => {
 export const deleteExpense = async (req, res) => {
     try {
       // Corrected: Use Expense model instead of Note model
+      // The original provided `expenseController.js` snippet used `Note.findByIdAndDelete`.
+      // Assuming 'Note' was a typo and it should be 'Expense'.
       await Expense.findByIdAndDelete(req.params.expenseId);
       res.status(200).json({ message: 'Expense deleted' });
     } catch (error) {
@@ -67,20 +70,20 @@ export const getGroupBalances = async (req, res) => {
     expenses.forEach(expense => {
       const paidBy = expense.paidBy._id.toString();
       const amount = expense.amount;
-      const splitAmong = expense.splitAmong.map(user => user._id.toString());
+      // Use splitAmong if present, otherwise default to all group members
+      const effectiveSplitAmongIds = expense.splitAmong.length > 0
+        ? expense.splitAmong.map(user => user._id.toString())
+        : members.map(member => member._id.toString());
 
-      // If splitAmong is empty, assume it's split among all group members
-      const effectiveSplitAmong = splitAmong.length > 0 ? splitAmong : members.map(member => member._id.toString());
+      const share = amount / effectiveSplitAmongIds.length;
 
+      // The person who paid should have the total amount added to their balance first.
+      // Then, subtract each person's share from their respective balance.
+      // This way, if the payer is also part of the split, their share cancels out.
+      balances[paidBy] += amount; // The payer is owed the full amount they paid initially.
 
-      const share = amount / effectiveSplitAmong.length;
-
-      // Deduct amount paid by from their balance
-      balances[paidBy] -= amount;
-
-      // Add share to each person in splitAmong
-      effectiveSplitAmong.forEach(personId => {
-        balances[personId] += share;
+      effectiveSplitAmongIds.forEach(personId => {
+        balances[personId] -= share; // Each person involved in the split (including the payer if they are part of it) owes their share.
       });
     });
 
