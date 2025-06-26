@@ -1,3 +1,4 @@
+Link to frontend Code: https://github.com/rangasashank/flatemateflow-frontend
 Flatmate Flow - Backend
 
 Flatmate Flow is a backend service for managing roommate groups, shared expenses, tasks, and notes. Built with the MERN stack, the backend provides a secure and efficient API for user and group management, task assignments, recurring tasks, and expense tracking.
