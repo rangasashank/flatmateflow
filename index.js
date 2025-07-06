@@ -11,6 +11,8 @@ import expenseRoutes from './routes/expenseRoutes.js';
 import cron from "node-cron";
 import { processRecurringTasks } from "./controllers/taskController.js";
 import cors from 'cors';
+import { set } from 'mongoose';
+import axios from 'axios';
 
 
 dotenv.config({
@@ -36,6 +38,22 @@ app.use('/api/tasks', taskRoutes);
 app.use('/api/notes', noteRoutes);
 app.use('/api/expenses', expenseRoutes);
 
+// A simple function to keep the server running
+
+const url = "https://flatmateflow.onrender.com";
+const interval = 10 * 60 * 1000; // 10 minutes in milliseconds
+
+function keepServerAlive() {
+  axios.get(url).then(response => {console.log('Server is alive:', response.status);}).catch(error => {
+    console.error('Error keeping server alive:', error.message);
+  });
+}
+
+setInterval(keepServerAlive, interval);
+// just to have to have a route with no body, so I can keep the server running using a cron job (render makes it sleep after 15 mins of inactivity)
+app.get('/', (req, res) => {
+    res.send('Welcome to Flatmate Flow API');
+});
 cron.schedule("0 2 * * *", async () => {
   console.log("Running recurring task scheduler...");
   await processRecurringTasks();
